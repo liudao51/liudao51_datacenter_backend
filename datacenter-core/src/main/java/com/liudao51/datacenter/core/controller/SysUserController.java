@@ -1,11 +1,10 @@
-package com.liudao51.datacenter.core.controller.impl;
+package com.liudao51.datacenter.core.controller;
 
 import com.liudao51.datacenter.common.annotation.RequestParamValid;
 import com.liudao51.datacenter.common.constant.ErrorCode;
 import com.liudao51.datacenter.common.page.Pager;
 import com.liudao51.datacenter.common.util.DateX;
 import com.liudao51.datacenter.common.util.StringX;
-import com.liudao51.datacenter.core.controller.ISysUserController;
 import com.liudao51.datacenter.core.entity.SysUser;
 import com.liudao51.datacenter.core.exception.AppException;
 import com.liudao51.datacenter.core.protocol.sys_user.*;
@@ -30,7 +29,7 @@ import java.util.Map;
 @Api(value = "系统用户相关", tags = {"系统用户相关接口"})
 @RestController
 @RequestMapping("/sys_user")
-public class SysUserControllerImpl extends BaseControllerImpl implements ISysUserController {
+public class SysUserController extends BaseController {
     @Autowired
     private ISysUserService sysUserService;
 
@@ -53,13 +52,13 @@ public class SysUserControllerImpl extends BaseControllerImpl implements ISysUse
         sysUser.setEmail(req.getEmail());
         sysUser.setDepartmentId(req.getDepartmentId());
         sysUser.setDepartmentName(req.getDepartmentName());
-        sysUser.setStatus(1);
+        sysUser.setStatus(Byte.parseByte("1"));
         sysUser.setRemark(req.getRemark());
         sysUser.setCreatedBy(handler);
         sysUser.setCreatedTime(dateTime);
         sysUser.setUpdatedBy(handler);
         sysUser.setUpdatedTime(dateTime);
-        sysUser.setDeleted(0);
+        sysUser.setDeleted(Byte.parseByte("0"));
 
         Boolean isSucceed = sysUserService.add(sysUser);
 
@@ -101,7 +100,6 @@ public class SysUserControllerImpl extends BaseControllerImpl implements ISysUse
         sysUser.setCreatedTime(dateTime);
         sysUser.setUpdatedBy(handler);
         sysUser.setUpdatedTime(dateTime);
-        sysUser.setDeleted(0);
 
         Boolean isSucceed = sysUserService.update(sysUser);
 
@@ -119,7 +117,7 @@ public class SysUserControllerImpl extends BaseControllerImpl implements ISysUse
     public ApiResponseBody delete(DeleteSysUserReq req) throws Exception {
         SysUser sysUser = new SysUser();
         sysUser.setId(req.getId());
-        sysUser.setDeleted(1);
+        sysUser.setDeleted(Byte.parseByte("1"));
         Boolean isSucceed = sysUserService.delete(sysUser);
 
         if (!isSucceed) {

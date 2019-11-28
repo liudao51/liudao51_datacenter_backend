@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liudao51.datacenter.core.mapper.SysUserMapper">
+
+    <resultMap id="selectOneResultMap" type="com.liudao51.datacenter.core.entity.SysUser">
+        <id column="id" property="id" jdbcType="BIGINT" javaType="java.lang.Long" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="password" property="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="email" property="email" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="department_id" property="departmentId" jdbcType="BIGINT" javaType="java.lang.Long"  />
+        <result column="department_name" property="departmentName" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Byte"  />
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="BIGINT" javaType="java.lang.Long"  />
+        <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="created_by" property="createdBy" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="created_time" property="createdTime" jdbcType="BIGINT" javaType="java.lang.Long"  />
+        <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="updated_time" property="updatedTime" jdbcType="BIGINT" javaType="java.lang.Long"  />
+        <result column="deleted" property="deleted" jdbcType="TINYINT" javaType="java.lang.Byte"  />
+        <result column="deleted_by" property="deletedBy" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="deleted_time" property="deletedTime" jdbcType="BIGINT" javaType="java.lang.Long"  />
+    </resultMap>
+
+    <resultMap id="selectListResultMap" type="com.liudao51.datacenter.core.entity.SysUser">
+        <id column="id" property="id" jdbcType="BIGINT" javaType="java.lang.Long" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="password" property="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="email" property="email" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="department_id" property="departmentId" jdbcType="BIGINT" javaType="java.lang.Long"  />
+        <result column="department_name" property="departmentName" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="status" property="status" jdbcType="TINYINT" javaType="java.lang.Byte"  />
+        <result column="remark" property="remark" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="BIGINT" javaType="java.lang.Long"  />
+        <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="created_by" property="createdBy" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="created_time" property="createdTime" jdbcType="BIGINT" javaType="java.lang.Long"  />
+        <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="updated_time" property="updatedTime" jdbcType="BIGINT" javaType="java.lang.Long"  />
+        <result column="deleted" property="deleted" jdbcType="TINYINT" javaType="java.lang.Byte"  />
+        <result column="deleted_by" property="deletedBy" jdbcType="VARCHAR" javaType="java.lang.String"  />
+        <result column="deleted_time" property="deletedTime" jdbcType="BIGINT" javaType="java.lang.Long"  />
+    </resultMap>
+
+    <select id="selectOne" parameterType="map" resultMap="selectOneResultMap">
+        SELECT
+            a.id,
+            a.user_name,
+            a.password,
+            a.real_name,
+            a.mobile,
+            a.email,
+            a.department_id,
+            a.department_name,
+            a.status,
+            a.remark,
+            a.last_login_time,
+            a.last_login_ip,
+            a.created_by,
+            a.created_time,
+            a.updated_by,
+            a.updated_time,
+            a.deleted,
+            a.deleted_by,
+            a.deleted_time
+        FROM dc_sys_user AS a
+        WHERE 1=1
+        <if test="parameter.user_name!=null and  parameter.user_name!=''">
+            AND a.user_name=#{parameter.user_name}
+        </if>
+        ORDER BY a.created_time DESC
+        LIMIT 0,1
+    </select>
+    <select id="selectList" parameterType="map" resultMap="selectListResultMap">
+        SELECT
+            a.id,
+            a.user_name,
+            a.password,
+            a.real_name,
+            a.mobile,
+            a.email,
+            a.department_id,
+            a.department_name,
+            a.status,
+            a.remark,
+            a.last_login_time,
+            a.last_login_ip,
+            a.created_by,
+            a.created_time,
+            a.updated_by,
+            a.updated_time,
+            a.deleted,
+            a.deleted_by,
+            a.deleted_time
+        FROM dc_sys_user AS a
+        ORDER BY a.created_time DESC
+    </select>
+</mapper>

@@ -12,11 +12,11 @@ import java.util.Map;
  * </p>
  */
 public interface ISysUserService extends IBaseService {
-    boolean add(SysUser sysUser);
+    Boolean add(SysUser sysUser);
 
-    boolean update(SysUser sysUser);
+    Boolean update(SysUser sysUser);
 
-    boolean delete(SysUser sysUser);
+    Boolean delete(SysUser sysUser);
 
     SysUser selectOne(Map args);
 

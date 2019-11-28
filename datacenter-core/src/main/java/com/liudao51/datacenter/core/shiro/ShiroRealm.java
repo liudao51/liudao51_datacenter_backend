@@ -51,7 +51,7 @@ public class ShiroRealm extends AuthorizingRealm {
         //从数据库获取对应用户名密码的用户
         Map args = new HashMap<String, Object>();
         args.clear();
-        args.put("userName", tokenUserName);
+        args.put("user_name", tokenUserName);
         SysUser user = sysUserService.selectOne(args);
 
         //判断用户名

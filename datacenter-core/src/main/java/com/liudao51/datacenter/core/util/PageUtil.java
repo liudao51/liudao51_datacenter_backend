@@ -1,8 +1,9 @@
 package com.liudao51.datacenter.core.util;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.liudao51.datacenter.common.page.Pager;
 import com.liudao51.datacenter.common.util.StringX;
+
+import java.util.List;
 
 /**
  * 分页工具类
@@ -11,9 +12,8 @@ public class PageUtil {
     private static final Long DEFAULT_PAGE_NO = 1L;
     private static final Long DEFAULT_PAGE_SIZE = 10L;
 
-    @SuppressWarnings("unchecked")
-    public static Pager mybatisPageToPager(IPage page) {
-        return new Pager(page.getCurrent(), page.getSize(), page.getTotal(), page.getRecords());
+    public static Pager recordToPager(List records, Long pageNo, Long PageSize, Long total) {
+        return new Pager(pageNo, PageSize, total, records);
     }
 
     public static Long getPageNo(Object val) {

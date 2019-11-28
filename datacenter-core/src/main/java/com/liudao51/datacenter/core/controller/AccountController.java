@@ -1,8 +1,7 @@
-package com.liudao51.datacenter.core.controller.impl;
+package com.liudao51.datacenter.core.controller;
 
 import com.liudao51.datacenter.common.annotation.RequestParamValid;
 import com.liudao51.datacenter.common.constant.ErrorCode;
-import com.liudao51.datacenter.core.controller.IAccountController;
 import com.liudao51.datacenter.core.entity.SysUser;
 import com.liudao51.datacenter.core.exception.AppException;
 import com.liudao51.datacenter.core.protocol.account.LoginReq;
@@ -29,7 +28,7 @@ import java.util.Map;
 @Api(value = "系统账户相关", tags = {"系统账户相关接口"})
 @RestController
 @RequestMapping("/account")
-public class AccountControllerImpl extends BaseControllerImpl implements IAccountController {
+public class AccountController extends BaseController {
     @Autowired
     private ISysUserService sysUserService;
 

@@ -1,6 +1,5 @@
-package com.liudao51.datacenter.core.controller.impl;
+package com.liudao51.datacenter.core.controller;
 
-import com.liudao51.datacenter.core.controller.IBaseController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -11,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p>
  * Created by jewel on 2019/8/5.
  */
-public abstract class BaseControllerImpl{
+public abstract class BaseController {
     /**
      * 得到request对象
      *

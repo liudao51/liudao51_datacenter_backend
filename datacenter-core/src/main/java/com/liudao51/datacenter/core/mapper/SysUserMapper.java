@@ -2,6 +2,10 @@ package com.liudao51.datacenter.core.mapper;
 
 import com.liudao51.datacenter.core.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -12,6 +16,9 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2019-07-10
  */
 @Mapper
-public interface SysUserMapper extends IBaseMapper<SysUser> {
+public interface SysUserMapper extends BaseMapper {
 
+    SysUser selectOne(@Param("parameter") Map args);
+
+    List<SysUser> selectList(@Param("parameter") Map args);
 }

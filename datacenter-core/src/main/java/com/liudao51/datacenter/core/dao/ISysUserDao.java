@@ -1,6 +1,6 @@
 package com.liudao51.datacenter.core.dao;
 
-import com.liudao51.datacenter.common.page.Pager;
+import com.liudao51.datacenter.common.page.PageX;
 import com.liudao51.datacenter.core.entity.SysUser;
 
 import java.util.List;
@@ -22,5 +22,5 @@ public interface ISysUserDao extends IBaseDao {
 
     List<SysUser> selectList(Map args);
 
-    List<SysUser> selectListPage(Map args);
+    PageX<SysUser> selectPage(Map args, PageX page);
 }

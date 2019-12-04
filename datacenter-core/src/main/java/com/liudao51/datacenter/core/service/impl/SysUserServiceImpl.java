@@ -1,11 +1,11 @@
 package com.liudao51.datacenter.core.service.impl;
 
-import com.liudao51.datacenter.common.page.Pager;
+import com.liudao51.datacenter.common.page.PageX;
 import com.liudao51.datacenter.common.util.StringX;
 import com.liudao51.datacenter.core.dao.ISysUserDao;
 import com.liudao51.datacenter.core.entity.SysUser;
+import com.liudao51.datacenter.core.exception.AppException;
 import com.liudao51.datacenter.core.service.ISysUserService;
-import com.liudao51.datacenter.core.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +21,28 @@ import java.util.Map;
 @Service
 public class SysUserServiceImpl extends BaseServiceImpl implements ISysUserService {
 
-    @Autowired
     private ISysUserDao sysUserDao;
 
-    @Override
-    protected Map<String, Object> convertToQueryParameter(Map args, Boolean withDelete) {
-        Map<String, Object> qp = new HashMap<String, Object>();
-        //删除标识
-        if (!withDelete) {
-            qp.put("deleted", 0);
-        }
+    @Autowired
+    public SysUserServiceImpl(ISysUserDao sysUserDao) {
+        this.sysUserDao = sysUserDao;
+    }
+
+    /**
+     * 把客户端Controller层参数转换为Dao层参数
+     *
+     * @param args
+     * @return
+     */
+    private Map<String, Object> convertToQueryParameter(Map<String, Object> args) {
+        return this.convertToQueryParameter(args, false);
+    }
+
+    private Map<String, Object> convertToQueryParameter(Map<String, Object> args, Boolean withDelete) {
+        Map<String, Object> qp = new HashMap<>();
+
+        //增加基础参数
+        qp = this.setBaseQueryParameter(qp, withDelete);
 
         //其他查询条件
         if (!StringX.isEmpty(args.get("user_name"))) {
@@ -52,34 +64,91 @@ public class SysUserServiceImpl extends BaseServiceImpl implements ISysUserServi
         return qp;
     }
 
-    public Boolean add(SysUser sysUser) {
+    /**
+     * 增加
+     *
+     * @param sysUser
+     * @return
+     * @throws AppException
+     */
+    public Boolean insert(SysUser sysUser) throws AppException {
         return sysUserDao.insert(sysUser);
     }
 
-    public Boolean update(SysUser sysUser) {
+    /**
+     * 更新
+     *
+     * @param sysUser
+     * @return
+     * @throws AppException
+     */
+    public Boolean update(SysUser sysUser) throws AppException {
         return sysUserDao.update(sysUser);
     }
 
-    public Boolean delete(SysUser sysUser) {
+    /**
+     * 删除
+     *
+     * @param sysUser
+     * @return
+     * @throws AppException
+     */
+    public Boolean delete(SysUser sysUser) throws AppException {
         return sysUserDao.delete(sysUser);
     }
 
-    public SysUser selectOne(Map args) {
+    /**
+     * 查询一行
+     *
+     * @param args
+     * @return
+     * @throws AppException
+     */
+    public SysUser selectOne(Map<String, Object> args) throws AppException {
         Map qp = this.convertToQueryParameter(args);
 
         return sysUserDao.selectOne(qp);
     }
 
-    public List<SysUser> selectList(Map args) {
+    /**
+     * 查询多行
+     *
+     * @param args
+     * @return
+     */
+    public List<SysUser> selectList(Map<String, Object> args) {
         return sysUserDao.selectList(args);
     }
 
+    /**
+     * 查询多行并分页
+     *
+     * @param args
+     * @param page
+     * @return
+     * @throws AppException
+     */
     @SuppressWarnings("unchecked")
-    public Pager<SysUser> selectListPage(Map args) {
+    public PageX<SysUser> selectPage(Map<String, Object> args, PageX page) throws AppException {
         Map qp = this.convertToQueryParameter(args);
-        qp = this.setPageQueryParameter(qp, args.get("page_no"), args.get("page_size"));
-        List<SysUser> records = sysUserDao.selectListPage(qp);
+        page = sysUserDao.selectPage(qp, page);
 
-        return PageUtil.recordToPager(records, 1L, 10L, 10L);
+        return page;
+    }
+
+    /**
+     * 查询多行并分页(含软删除的记录)
+     *
+     * @param args
+     * @param page
+     * @return
+     * @throws AppException
+     */
+    @SuppressWarnings("unchecked")
+    public PageX<SysUser> selectPageWithDelete(Map<String, Object> args, PageX page) throws AppException {
+        Map qp = this.convertToQueryParameter(args, true);
+        page = sysUserDao.selectPage(qp, page);
+
+        return page;
     }
 }

@@ -19,9 +19,9 @@ public class AppTest {
 
     @Test
     public void resetPassword() {
-        String userName = "admin";
         String password = "123456";
-        String result = ShiroUtil.encryptPassword(password, userName);
+        String salt = "si1si1";
+        String result = ShiroUtil.encryptPassword(password, salt);
         System.out.println(result);
     }
 }

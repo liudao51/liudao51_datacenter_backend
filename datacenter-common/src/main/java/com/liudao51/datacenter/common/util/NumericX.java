@@ -8,7 +8,50 @@ import java.text.DecimalFormat;
  * <p>
  * Created by jewel on 2019/4/23.
  */
-public class DoubleX {
+public class NumericX {
+
+    public static final Integer NUMERIC_TYPE_INTEGER = 1;
+    public static final Integer NUMERIC_TYPE_DOUBLE = 2;
+
+    /**
+     * 检查是否为空
+     *
+     * @param val
+     * @return
+     */
+    public static boolean isEmpty(Object val) {
+        return (val == null || "".equals(val) || "null".equals(val));
+    }
+
+    /**
+     * 检查是否为数字
+     * @param val
+     * @return
+     */
+    public static boolean isNumeric(Object val) {
+        if (val != null && !"".equals(val) && !"null".equals(val)) {
+            return val.toString().matches("^[-\\+]?[0-9.]*$");
+        }
+        return false;
+    }
+
+    /**
+     * 检查是否为特定类型的数字
+     * @param val
+     * @param numericType
+     * @return
+     */
+    public static boolean isNumeric(Object val, Integer numericType) {
+        if (val != null && !"".equals(val) && !"null".equals(val)) {
+            switch (numericType) {
+                case 1:
+                    return val.toString().matches("^[-\\+]?[0-9]*$");
+                case 2:
+                    return val.toString().matches("^[-\\+]?[0-9.]*$");
+            }
+        }
+        return false;
+    }
 
     /**
      * 转换为n位小数,返回String

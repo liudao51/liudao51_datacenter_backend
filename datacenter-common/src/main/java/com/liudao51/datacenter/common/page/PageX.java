@@ -1,33 +1,38 @@
 package com.liudao51.datacenter.common.page;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 自定义分页对象
  */
-public class Pager<T> {
+public class PageX<T> implements Serializable {
     //已知数据
-    private Long pageNo;  //当前页
-    private Long pageSize;  //每页显示条数
-    private Long totalRecord;  //总记录条数
+    private Integer pageNo;  //当前页
+    private Integer pageSize;  //每页显示条数
+    private Integer totalRecord;  //总记录条数
     private List<T> records;  //将每页要显示的数据放在list集合中
 
     //需要计算得来
-    private Long totalPage; //总页数
-    private Long prePage; //前一页
-    private Long nextPage; //后一页
-    private Long startIndex; //记录索引开始位置（在数据库中要从第几行数据开始拿）
+    private Integer totalPage; //总页数
+    private Integer prePage; //前一页
+    private Integer nextPage; //后一页
+    private Integer startIndex; //记录索引开始位置（在数据库中要从第几行数据开始拿）
 
-    public Pager(Long pageNo, Long pageSize, Long totalRecord) {
+    public PageX(Integer pageNo, Integer pageSize) {
+        this.init(pageNo, pageSize, 0);
+    }
+
+    public PageX(Integer pageNo, Integer pageSize, Integer totalRecord) {
         this.init(pageNo, pageSize, totalRecord);
     }
 
-    public Pager(Long pageNo, Long pageSize, Long totalRecord, List<T> records) {
+    public PageX(Integer pageNo, Integer pageSize, Integer totalRecord, List<T> records) {
         this.init(pageNo, pageSize, totalRecord);
         this.setRecords(records);
     }
 
-    private void init(Long pageNo, Long pageSize, Long totalRecord) {
+    private void init(Integer pageNo, Integer pageSize, Integer totalRecord) {
         this.pageNo = pageNo;
         this.pageSize = pageSize;
         this.totalRecord = totalRecord;
@@ -45,31 +50,31 @@ public class Pager<T> {
         this.startIndex = (pageNo - 1) * pageSize;
     }
 
-    public Long getPageNo() {
+    public Integer getPageNo() {
         return pageNo;
     }
 
-    public Long getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public Long getTotalRecord() {
+    public Integer getTotalRecord() {
         return totalRecord;
     }
 
-    public Long getTotalPage() {
+    public Integer getTotalPage() {
         return totalPage;
     }
 
-    public Long getPrePage() {
+    public Integer getPrePage() {
         return prePage;
     }
 
-    public Long getNextPage() {
+    public Integer getNextPage() {
         return nextPage;
     }
 
-    public Long getStartIndex() {
+    public Integer getStartIndex() {
         return startIndex;
     }
 

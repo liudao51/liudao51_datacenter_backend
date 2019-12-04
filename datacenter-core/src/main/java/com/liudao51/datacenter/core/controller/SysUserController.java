@@ -2,7 +2,7 @@ package com.liudao51.datacenter.core.controller;
 
 import com.liudao51.datacenter.common.annotation.RequestParamValid;
 import com.liudao51.datacenter.common.constant.ErrorCode;
-import com.liudao51.datacenter.common.page.Pager;
+import com.liudao51.datacenter.common.page.PageX;
 import com.liudao51.datacenter.common.util.DateX;
 import com.liudao51.datacenter.common.util.StringX;
 import com.liudao51.datacenter.core.entity.SysUser;
@@ -11,6 +11,7 @@ import com.liudao51.datacenter.core.protocol.sys_user.*;
 import com.liudao51.datacenter.core.response.ApiResponse;
 import com.liudao51.datacenter.core.response.ApiResponseBody;
 import com.liudao51.datacenter.core.service.ISysUserService;
+import com.liudao51.datacenter.core.util.PageUtil;
 import com.liudao51.datacenter.core.util.ShiroUtil;
 import com.liudao51.datacenter.core.util.UidUtil;
 import io.swagger.annotations.Api;
@@ -30,23 +31,30 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys_user")
 public class SysUserController extends BaseController {
-    @Autowired
+
     private ISysUserService sysUserService;
+
+    @Autowired
+    public SysUserController(ISysUserService sysUserService) {
+        this.sysUserService = sysUserService;
+    }
 
     @ApiOperation(value = "用户新增")
     @PostMapping("/add")
     @RequestParamValid
     @SuppressWarnings("unchecked")
-    public ApiResponseBody<Pager<SysUser>> add(AddSysUserReq req) throws Exception {
+    public ApiResponseBody<PageX<SysUser>> add(AddSysUserReq req) throws Exception {
         Date date = DateX.getDate();
         Long dateTime = date.getTime();
         String handler = "admin";
         Long id = UidUtil.getUid();
+        String salt = ShiroUtil.getRandomSalt();
 
         SysUser sysUser = new SysUser();
         sysUser.setId(id);
         sysUser.setUserName(req.getUserName());
-        sysUser.setPassword(ShiroUtil.encryptPassword(req.getPassword(), req.getUserName())); //这里使用用户名作为密码的盐值
+        sysUser.setPassword(ShiroUtil.encryptPassword(req.getPassword(), salt));
+        sysUser.setSalt(salt);
         sysUser.setRealName(req.getRealName());
         sysUser.setMobile(req.getMobile());
         sysUser.setEmail(req.getEmail());
@@ -60,7 +68,7 @@ public class SysUserController extends BaseController {
         sysUser.setUpdatedTime(dateTime);
         sysUser.setDeleted(Byte.parseByte("0"));
 
-        Boolean isSucceed = sysUserService.add(sysUser);
+        Boolean isSucceed = sysUserService.insert(sysUser);
 
         if (!isSucceed) {
             throw new AppException(ErrorCode.USER_ADD_ERROR.toValue(), ErrorCode.USER_ADD_ERROR.toCode());
@@ -73,21 +81,20 @@ public class SysUserController extends BaseController {
     @PostMapping("/update")
     @RequestParamValid
     @SuppressWarnings("unchecked")
-    public ApiResponseBody<Pager<SysUser>> update(UpdateSysUserReq req) throws Exception {
+    public ApiResponseBody<PageX<SysUser>> update(UpdateSysUserReq req) throws Exception {
         Date date = DateX.getDate();
         Long dateTime = date.getTime();
         Long id = req.getId();
         String handler = "admin";
+        String salt = ShiroUtil.getRandomSalt();
 
         SysUser sysUser = new SysUser();
         sysUser.setId(id);
 
-        //因为用户名是作为密码的盐值的,所用户名一旦创建则不允许更改
-        //sysUser.setUserName(req.getUserName());
-
         //如果密码没有填写,则使用之前的密码
         if (!StringX.isEmpty(req.getPassword())) {
-            sysUser.setPassword(ShiroUtil.encryptPassword(req.getPassword(), req.getUserName()));
+            sysUser.setPassword(ShiroUtil.encryptPassword(req.getPassword(), salt));
+            sysUser.setSalt(salt);
         }
 
         sysUser.setRealName(req.getRealName());
@@ -132,6 +139,7 @@ public class SysUserController extends BaseController {
     @RequestParamValid
     @SuppressWarnings("unchecked")
     public ApiResponseBody<SysUser> get(GetSysUserReq req) throws Exception {
+        //设置查询参数
         Map args = new HashMap<String, Object>();
         args.put("user_name", req.getUserName());
         args.put("real_name", req.getRealName());
@@ -147,18 +155,20 @@ public class SysUserController extends BaseController {
     @PostMapping("/list")
     @RequestParamValid
     @SuppressWarnings("unchecked")
-    public ApiResponseBody<Pager<SysUser>> list(ListSysUserReq req) throws Exception {
+    public ApiResponseBody<PageX<SysUser>> list(ListSysUserReq req) throws Exception {
+        //设置查询参数
         Map args = new HashMap<String, Object>();
-        args.put("page_no", req.getPageNo());
-        args.put("page_size", req.getPageSize());
         args.put("user_name", req.getUserName());
         args.put("real_name", req.getRealName());
         args.put("mobile", req.getMobile());
         args.put("email", req.getEmail());
 
-        Pager<SysUser> sysUserList = sysUserService.selectListPage(args);
+        //设置分页参数
+        PageX page = new PageX(PageUtil.getPageNo(req.getPageNo()), PageUtil.getPageSize(req.getPageSize()));
 
-        return new ApiResponse<Pager<SysUser>>().success(sysUserList);
+        PageX<SysUser> sysUserList = sysUserService.selectPage(args, page);
+
+        return new ApiResponse<PageX<SysUser>>().success(sysUserList);
     }
 
     @ApiOperation(value = "用户列表查询-导出")
@@ -166,23 +176,25 @@ public class SysUserController extends BaseController {
     @RequestParamValid
     @SuppressWarnings("unchecked")
     public ApiResponseBody listExport(ListSysUserReq req) throws Exception {
-        return new ApiResponse<Pager<SysUser>>().success();
+        return new ApiResponse<PageX<SysUser>>().success();
     }
 
     @ApiOperation(value = "用户列表查询-下拉菜单")
     @PostMapping("/list/filter")
     @RequestParamValid
     @SuppressWarnings("unchecked")
-    public ApiResponseBody<Pager<SysUser>> listFilter(ListSysUserFilterReq req) throws Exception {
+    public ApiResponseBody<PageX<SysUser>> listFilter(ListSysUserFilterReq req) throws Exception {
+        //设置查询参数
         Map args = new HashMap<String, Object>();
-        args.put("page_no", req.getPageNo());
-        args.put("page_size", req.getPageSize());
         args.put("user_name", req.getUserName());
         args.put("real_name", req.getRealName());
         args.put("email", req.getEmail());
 
-        Pager<SysUser> sysUserListPage = sysUserService.selectListPage(args);
+        //设置分页参数
+        PageX page = new PageX(PageUtil.getPageNo(req.getPageNo()), PageUtil.getPageNo(req.getPageSize()));
 
-        return new ApiResponse<Pager<SysUser>>().success(sysUserListPage);
+        PageX<SysUser> sysUserListPage = sysUserService.selectPage(args, page);
+
+        return new ApiResponse<PageX<SysUser>>().success(sysUserListPage);
     }
 }

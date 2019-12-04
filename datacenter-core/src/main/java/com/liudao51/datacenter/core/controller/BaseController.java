@@ -14,11 +14,10 @@ public abstract class BaseController {
     /**
      * 得到request对象
      *
-     * @return
+     * @return HttpServletRequest
      */
     public HttpServletRequest getRequest() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-
         return request;
     }
 }

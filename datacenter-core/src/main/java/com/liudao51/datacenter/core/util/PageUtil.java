@@ -1,7 +1,8 @@
 package com.liudao51.datacenter.core.util;
 
-import com.liudao51.datacenter.common.page.Pager;
-import com.liudao51.datacenter.common.util.StringX;
+import com.github.pagehelper.PageInfo;
+import com.liudao51.datacenter.common.page.PageX;
+import com.liudao51.datacenter.common.util.NumericX;
 
 import java.util.List;
 
@@ -9,40 +10,28 @@ import java.util.List;
  * 分页工具类
  */
 public class PageUtil {
-    private static final Long DEFAULT_PAGE_NO = 1L;
-    private static final Long DEFAULT_PAGE_SIZE = 10L;
+    private static final Integer DEFAULT_PAGE_NO = 1;
+    private static final Integer DEFAULT_PAGE_SIZE = 10;
 
-    public static Pager recordToPager(List records, Long pageNo, Long PageSize, Long total) {
-        return new Pager(pageNo, PageSize, total, records);
+    @SuppressWarnings("unchecked")
+    public static Integer getPageNo(Object val) {
+        return (NumericX.isNumeric(val, NumericX.NUMERIC_TYPE_INTEGER) && Integer.valueOf(val.toString()) > 0) ?
+                Integer.valueOf(val.toString()) : DEFAULT_PAGE_NO;
     }
 
-    public static Long getPageNo(Object val) {
-        Long pageNo = 1L;
-
-        if (!StringX.isEmpty(val)) {
-            try {
-                pageNo = Long.valueOf(StringX.getString(val, "1"));
-                pageNo = (pageNo > 0) ? pageNo : DEFAULT_PAGE_NO;
-            } catch (Exception e) {
-                pageNo = DEFAULT_PAGE_NO;
-            }
-        }
-
-        return pageNo;
+    @SuppressWarnings("unchecked")
+    public static Integer getPageSize(Object val) {
+        return (NumericX.isNumeric(val, NumericX.NUMERIC_TYPE_INTEGER) && Integer.valueOf(val.toString()) > 0) ?
+                Integer.valueOf(val.toString()) : DEFAULT_PAGE_SIZE;
     }
 
-    public static Long getPageSize(Object val) {
-        Long pageSize = 1L;
+    @SuppressWarnings("unchecked")
+    public static PageX recordToPage(List records, Integer pageNo, Integer PageSize, Integer total) {
+        return new PageX(pageNo, PageSize, total, records);
+    }
 
-        if (!StringX.isEmpty(val)) {
-            try {
-                pageSize = Long.valueOf(StringX.getString(val, "1"));
-                pageSize = (pageSize > 0) ? pageSize : DEFAULT_PAGE_SIZE;
-            } catch (Exception e) {
-                pageSize = DEFAULT_PAGE_SIZE;
-            }
-        }
-
-        return pageSize;
+    @SuppressWarnings("unchecked")
+    public static PageX pageInfoToPage(PageInfo pageInfo) {
+        return new PageX(pageInfo.getPageNum(), pageInfo.getPageSize(), Long.valueOf(pageInfo.getTotal()).intValue(), pageInfo.getList());
     }
 }

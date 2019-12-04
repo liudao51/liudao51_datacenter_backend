@@ -31,6 +31,11 @@ public class SysUser extends BaseEntity{
     @ApiModelProperty(value = "密码", example = "123456", required = true)
     private String password;
     /**
+     * 盐值
+     */
+    @ApiModelProperty(value = "盐值", example = "123456", required = true)
+    private String salt;
+    /**
      * 真实姓名
      */
     @ApiModelProperty(value = "真实姓名", example = "刘言", required = true)

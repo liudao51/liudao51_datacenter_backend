@@ -18,7 +18,7 @@ import java.util.Map;
 @Mapper
 public interface SysUserMapper extends BaseMapper {
 
-    SysUser selectOne(@Param("parameter") Map args);
+    SysUser selectOne(@Param("parameter") Map<String, Object> args);
 
-    List<SysUser> selectList(@Param("parameter") Map args);
+    List<SysUser> selectList(@Param("parameter") Map<String, Object> args);
 }

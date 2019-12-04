@@ -74,7 +74,7 @@ public class ShiroRealm extends AuthorizingRealm {
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(
                 user, //用户对象（当使用redis作为缓存时,这里必须为user对象；对使用ehcache作为缓存时,这里可以为userName,也可以为user对象）
                 user.getPassword(), //密码
-                ByteSource.Util.bytes(user.getUserName()), //salt盐值
+                ByteSource.Util.bytes(user.getSalt()), //salt盐值
                 this.getName() //realam名字
         );
 

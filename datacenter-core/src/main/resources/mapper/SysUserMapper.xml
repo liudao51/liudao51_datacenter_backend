@@ -6,6 +6,7 @@
         <id column="id" property="id" jdbcType="BIGINT" javaType="java.lang.Long" />
         <result column="user_name" property="userName" jdbcType="VARCHAR" javaType="java.lang.String" />
         <result column="password" property="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="salt" property="salt" jdbcType="VARCHAR" javaType="java.lang.String"  />
         <result column="real_name" property="realName" jdbcType="VARCHAR" javaType="java.lang.String"  />
         <result column="mobile" property="mobile" jdbcType="VARCHAR" javaType="java.lang.String"  />
         <result column="email" property="email" jdbcType="VARCHAR" javaType="java.lang.String"  />
@@ -28,6 +29,7 @@
         <id column="id" property="id" jdbcType="BIGINT" javaType="java.lang.Long" />
         <result column="user_name" property="userName" jdbcType="VARCHAR" javaType="java.lang.String" />
         <result column="password" property="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="salt" property="salt" jdbcType="VARCHAR" javaType="java.lang.String"  />
         <result column="real_name" property="realName" jdbcType="VARCHAR" javaType="java.lang.String"  />
         <result column="mobile" property="mobile" jdbcType="VARCHAR" javaType="java.lang.String"  />
         <result column="email" property="email" jdbcType="VARCHAR" javaType="java.lang.String"  />
@@ -51,6 +53,7 @@
             a.id,
             a.user_name,
             a.password,
+            a.salt,
             a.real_name,
             a.mobile,
             a.email,
@@ -80,6 +83,7 @@
             a.id,
             a.user_name,
             a.password,
+            a.salt,
             a.real_name,
             a.mobile,
             a.email,

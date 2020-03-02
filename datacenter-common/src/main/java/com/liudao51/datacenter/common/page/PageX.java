@@ -7,13 +7,15 @@ import java.util.List;
  * 自定义分页对象
  */
 public class PageX<T> implements Serializable {
-    //已知数据
+    //页面(或配置)参数
     private Integer pageNo;  //当前页
     private Integer pageSize;  //每页显示条数
+
+    //数据库查询得到
     private Integer totalRecord;  //总记录条数
     private List<T> records;  //将每页要显示的数据放在list集合中
 
-    //需要计算得来
+    //需要计算得到
     private Integer totalPage; //总页数
     private Integer prePage; //前一页
     private Integer nextPage; //后一页

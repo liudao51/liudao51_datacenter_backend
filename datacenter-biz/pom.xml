@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.liudao51.datacenter</groupId>
@@ -9,9 +8,19 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>datacenter-common</artifactId>
+    <artifactId>datacenter-biz</artifactId>
     <version>1.0.0</version>
+    <name>datacenter-biz</name>
     <packaging>jar</packaging>
+    <url>http://www.example.com</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
+    </properties>
 
     <dependencies>
         <!-- web -->
@@ -49,10 +58,16 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- mybatis -->
+        <!-- spring aop -->
         <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- aspectjrt -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
         </dependency>
 
         <!-- mybatis -->
@@ -63,6 +78,34 @@
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- dubbo -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-dependencies-zookeeper</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+            <type>pom</type>
+        </dependency>
+
+        <!-- zookeeper -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-dependencies-zookeeper</artifactId>
+            <type>pom</type>
         </dependency>
 
         <!-- velocity -->
@@ -84,17 +127,23 @@
             <artifactId>druid</artifactId>
         </dependency>
 
-        <!-- org.json -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-        </dependency>
-
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- p6spy -->
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+        </dependency>
+
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
 
         <!-- swagger -->
@@ -107,15 +156,28 @@
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
 
+        <!-- oval -->
         <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
+            <groupId>net.sf.oval</groupId>
+            <artifactId>oval</artifactId>
         </dependency>
 
+        <!-- shiro -->
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
+        </dependency>
+
+        <!-- datacenter-common -->
+        <dependency>
+            <groupId>com.liudao51.datacenter</groupId>
+            <artifactId>datacenter-common</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -124,26 +186,37 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!-- 指定该Main Class为全局的唯一入口(公共包不用指定mainClass) -->
-                    <!--<mainClass>com.liudao51.datacenter.web.DatacenterWebApplication</mainClass>-->
+                    <!-- 指定该Main Class为全局的唯一入口, 用于作为命令行《java -jar xxx.jar》启动项目时的入口文件 -->
+                    <mainClass>com.liudao51.datacenter.biz.DatacenterBizApplication</mainClass>
                     <layout>ZIP</layout>
                     <!-- 没有该配置, devtools是不会生效 -->
                     <fork>true</fork>
                     <!--增加jvm参数-->
                     <jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal><!--可以把依赖的包都打包到生成的jar包中-->
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-           <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <!-- 编译插件maven-compiler-plugin -->
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                 </configuration>
             </plugin>
         </plugins>
+
+        <!-- 设置资源文件的路径(即设置哪些xml需要被打包到target中) -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
+                    <!-- 设置需要打包的文件:*.properties,*.yml,*.xml,*.sh -->
                     <include>*.properties</include>
                     <include>*.yml</include>
                     <include>*.xml</include>
@@ -160,6 +233,15 @@
                 </includes>
                 <filtering>false</filtering>
             </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <!-- 设置mybatis的xml文件打包到target中的位置 -->
+                    <include>com/liudao51/datacenter/biz/*/mapper/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
         </resources>
     </build>
+
 </project>

@@ -18,6 +18,7 @@ public enum ErrorCode {
      */
     SYSTEM_UNKNOWN_ERROR(10001, "系统繁忙"),
     SYSTEM_TIMEOUT_ERROR(10002, "系统超时"),
+    SYSTEM_RESOURCES_IO_ERROR(10003, "资源文件读取错误"),
 
     REQUEST_SIGN_ERROR(20001, "签名错误"),
     REQUEST_SIGN_TYPE_ERROR(20002, "签名类型错误"),
@@ -25,7 +26,7 @@ public enum ErrorCode {
     REQUEST_APP_SECRET_ERROR(20004, "APP_SECRET错误"),
     REQUEST_PARAM_ERROR(20005, "请求参数错误"),
     REQUEST_NEED_IMPLEMENTS_PARAMVALIDINTERFACE_ERROR(20006, "请求参数对象必须实现要ParamValidInterface接口"),
-    REQUEST_PAGE_NO_OR_PAGE_SIZE_ERROR(20007,"页码或页数错误"),
+    REQUEST_PAGE_NO_OR_PAGE_SIZE_ERROR(20007, "页码或页数错误"),
 
     USER_NOT_AUTHORIZE_ERROR(21001, "没有此操作权限"),
     USER_NOT_LOGIN_ERROR(21002, "请先登录"),
